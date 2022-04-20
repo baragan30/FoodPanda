@@ -27,6 +27,9 @@ public class FoodService {
     public List<Food> getFoods(FoodCategory category) {
         return foodRepository.findFoodByCategory(category);
     }
+    public List<Food> findFoodByCategoryAndByRestaurantID(FoodCategory foodCategory,Long restaurantId){
+        return foodRepository.findFoodByCategoryAndByRestaurantID(foodCategory,restaurantId);
+    }
 
     public List<Food> getALL(){
         return foodRepository.findAll();

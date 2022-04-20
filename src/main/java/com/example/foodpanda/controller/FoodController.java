@@ -26,6 +26,15 @@ public class FoodController {
 
         return ResponseEntity.ok().body("Done");
     }
+    @GetMapping("/getFoodsByCategoryAndRestaurant/{category}/{restaurantId}")
+    public ResponseEntity getFoodsByCategoryAndByRestaurant(@PathVariable FoodCategory category,@PathVariable Long restaurantId) {
+        try {
+            return ResponseEntity.ok().body(foodService.findFoodByCategoryAndByRestaurantID(category,restaurantId));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().body("error");
+    }
     @GetMapping("/getFoodsByCategory/{category}")
     public ResponseEntity getFoodsByCategory(@PathVariable FoodCategory category) {
         System.out.println("-----------------" + category.toString());
