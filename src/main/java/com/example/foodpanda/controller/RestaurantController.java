@@ -40,14 +40,12 @@ public class RestaurantController {
     @GetMapping("/restaurantLogin/{name}/{password}")
     public ResponseEntity logIn(@PathVariable String name, @PathVariable String password){
         try{
-            System.out.println(name);
             restaurant = restaurantService.getRestaurantByName(name);
-            System.out.println("+++++++++++++mere++++++++++++++++");
             if(Restaurant.password.equals(password))
                 return ResponseEntity.ok().body(restaurant);
         }catch (Exception e){
-            System.out.println("------------------mere--------------");
             e.printStackTrace();
+
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Username or password are incorrect");
     }

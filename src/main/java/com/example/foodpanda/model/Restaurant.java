@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Restaurants")
-public class Restaurant {
+public class Restaurant{
     public static final String password = "admin";
 
     @Id
