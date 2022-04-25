@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+reactappl/node_modules/
