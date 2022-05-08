@@ -20,7 +20,7 @@ public class UserController {
     public ResponseEntity addNewUser(@RequestBody User user){
         try {
             userService.saveuser(user);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.ok().body("Internal Faillure");
         }
@@ -29,7 +29,7 @@ public class UserController {
     @GetMapping("/userLogin/{username}/{password}")
     public ResponseEntity logIn(@PathVariable String username, @PathVariable String password){
         try{
-            return ResponseEntity.ok().body(userService.getuserByUsername(username,password));
+            return ResponseEntity.ok().body(userService.login(username,password));
         }catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());

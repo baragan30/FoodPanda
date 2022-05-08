@@ -3,12 +3,16 @@ package com.example.foodpanda.controller;
 import com.example.foodpanda.model.Food;
 import com.example.foodpanda.model.FoodCategory;
 import com.example.foodpanda.service.FoodService;
+import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/")
 public class FoodController {
@@ -35,20 +39,8 @@ public class FoodController {
         }
         return ResponseEntity.ok().body("error");
     }
-    @GetMapping("/getFoodsByCategory/{category}")
-    public ResponseEntity getFoodsByCategory(@PathVariable FoodCategory category) {
-        System.out.println("-----------------" + category.toString());
-        ResponseEntity l = null;
-        try {
-            l = ResponseEntity.ok().body(foodService.getFoods(category));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        System.out.println("++++++++++++++++" + category.toString());
-        return l;
-    }
     @GetMapping("/getFoodsByRestaurantName/{restaurantName}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity getFoodsByRestaurantName(@PathVariable String restaurantName) {
         List<Food> foods = null;
         try {

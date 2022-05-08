@@ -2,6 +2,7 @@ import './css/LoginPage.css'
 import React from "react";
 import {useNavigate,BrowserRouter as Router,Link,Routes,Route} from "react-router-dom"
 import axios from 'axios';
+import AuthService from './AuthService';
 
 // import data from './App'
 
@@ -85,17 +86,12 @@ function loginRestaurant(name, password){
 
 }
 function loginUser(username, password){
-    axios.get(`${serverRoot}/userLogin/${username}/${password}`)
-      .then(res => {
-            navigate('/user',{
-                state: res.data
-              });
-      }).catch(function (error) {
-            if (error.response.status === 404) {
-                displayError(error.response.data);
-            }
-        })
-
+    AuthService.loginUser(username,password)
+    .then(res => {
+        navigate('/user');
+    }).catch(function(error){
+        displayError(error);
+    });
 }
 function register(event){
     displayError("");
@@ -111,7 +107,7 @@ function register(event){
             username :username,
             password : password1
         }
-        axios.post(`${serverRoot}/newUser`, user)
+        axios.post(`${serverRoot}/authcontroller/signupclient`, user)
           .then(function (response) {
             navigate("/")
           })
@@ -125,7 +121,7 @@ function displayError(error){
     document.getElementById("#error").innerText = error;
 }
 function populateData(){
-    axios.post(`${serverRoot}/populate`);
+    axios.post(`${serverRoot}/populationcontroller/populate`);
 }
 export default LoginPage;
 

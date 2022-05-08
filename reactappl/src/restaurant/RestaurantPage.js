@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {useLocation } from 'react-router-dom';
-import './css/RestaurantPage.css'
+import {useLocation } from 'react-router-dom';  
 import {useNavigate,Link,Routes,Route} from "react-router-dom"
 
 import RestaurantNavBar from './RestaurantNavBar'
@@ -16,7 +15,7 @@ function RestaurantPage(){
         <Routes>
           <Route path="/foods" element = {<FoodsScreen curentRestaurant = {curentRestaurant}/>}/>
           <Route path="/orders" element = {<OrdersScreen restaurant={curentRestaurant}/>}/>
-          <Route path="/restaurants" element = {<RestaurantsScreen/>}/>
+          <Route path="/restaurants" element = {<div><RestaurantsScreen/></div>}/>
         </Routes>
 
       </div>

@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import UserNavBar from './UserNavBar';
-import {useNavigate,Link,Routes,Route} from "react-router-dom"
+import {Routes,Route} from "react-router-dom"
 import OrdersScreen from './screens/OrdersScreen';
 import FoodsScreen from './screens/FoodsScreen';
 import CartScreen from './screens/CartScreen';
 import axios from 'axios';
+import AuthService from '../AuthService';
 
 const serverRoot = 'http://localhost:8080'
 function UserPage(){
     
-    const [user,setUser] = useState(useLocation().state);
-    const [cart,setCurentCart] = useState([]) 
+    let user = AuthService.getCurrentUser();
+    const [cart, setCurentCart] = useState([]) 
 
     const addToCart = (food) =>{
         let order = cart.find(order => order.restaurant.id == food.restaurant.id);
         if(order === undefined){
             order = {restaurant : food.restaurant,
-            foods: [food],
-            user:user,
-            orderType: 'PENDING'
+            foods : [food],
+            user : user,
+            orderType : 'PENDING'
         };
             cart.push(order);
         }else{

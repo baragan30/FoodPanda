@@ -1,6 +1,8 @@
 import axios from "axios"
+import React from "react";
 import { useEffect, useState } from "react"
 import Food from "../modules/AddFoodBar";
+import AuthService from "../../AuthService";
 const serverRoot = 'http://localhost:8080';
 
 export default function FoodsScreen({addToCart}){
@@ -40,12 +42,18 @@ export default function FoodsScreen({addToCart}){
           </table>
 
         </div>
-    )
+    );
 }
 
 async function loadFoods(restaurantName){
   
-    return await axios.get(`${serverRoot}/getFoodsByRestaurantName/${restaurantName}`)
+  let user = AuthService.getCurrentUser();
+  console.log(user);
+    return await axios.get(`${serverRoot}/getFoodsByRestaurantName/${restaurantName}`,
+      {
+        headers :{ Authorization: "Bearer " + user.jwt}
+      }
+    )
     .then(
         res => {
             return res.data;

@@ -1,3 +1,4 @@
+import React from 'react';
 import LoginPage from './LoginPage'
 import RestaurantPage from './restaurant/RestaurantPage';
 import UserPage from './user/UserPage';

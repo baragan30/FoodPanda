@@ -13,7 +13,7 @@ public interface FoodRepository extends JpaRepository<Food,Long> {
         List<Food> findAll();
         @Query("SELECT f FROM Food f " +
                 "LEFT OUTER JOIN Restaurant r on f.restaurant = r " +
-                "where r.name like %:restaurantName% " )
+                "where r.name like %:restaurantName% ")
         List<Food> getFoodsByRestaurantName(@Param("restaurantName") String restaurantName);
         @Query("SELECT f FROM Food f " +
                 "where f.category = :category and f.restaurant.id = :restaurantId " )

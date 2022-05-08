@@ -1,10 +1,12 @@
 package com.example.foodpanda.service;
 
-import com.example.foodpanda.model.Restaurant;
 import com.example.foodpanda.model.User;
 import com.example.foodpanda.repository.UserRepository;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,53 +16,47 @@ import java.util.List;
 
 @Service
 public class UserService {
+    private static final Logger logger = LogManager.getLogger(UserService.class);
     private final UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public User getuserByUsername(String username,String password) throws Exception{
+    /**
+     * try to login a user by a username and a password
+     * @return the user with coresponding username
+     * @throws Exception if it doesn't exists a user in database with specific username and password
+     */
+    public User login(String username, String password) throws Exception{
         User user = userRepository.findUserByUsername(username).get(0);
-        if(user.getPassword().equals(encodePassword(password)))
+        if(user.getPassword().equals(encoder.encode(password))) {
+            logger.info("User " + user.getUsername() + " has login");
             return user;
-        else
-            throw new Exception("Password or username are incorrect");
-    }
-
-    public List<User> getALL(){
-        return userRepository.findAll();
+        }
+        else{
+            String errorString = "Password or username are incorrect";
+            logger.error(errorString);
+            throw new Exception(errorString);
+        }
     }
 
     @Transactional
-    public void saveuser(User user) throws NoSuchAlgorithmException {
-        user.setPassword(encodePassword(user.getPassword()));
-        userRepository.save(user);
-    }
-
-    public String encodePassword(String password) throws NoSuchAlgorithmException
-    {
-        //we will use MD5 encryption technique???
-        String encryptedPassword = null;
-
-        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-        messageDigest.update(password.getBytes());
-
-        byte[] bytes = messageDigest.digest();
-
-        StringBuilder sb = new StringBuilder();
-        for (byte aByte : bytes)
-        {
-            sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+    public void saveuser(User user) throws Exception {
+        try {
+            user.setPassword(encoder.encode(user.getPassword()));
+            userRepository.save(user);
+            logger.info("An user " +user.getUsername() + " was created" );
+        } catch (Exception e){
+            logger.error(e.toString()) ;
+            throw e;
         }
 
-        encryptedPassword = sb.toString();
-
-        return encryptedPassword;
     }
-
-
 
     @Transactional
     public void deleteuser(User user){

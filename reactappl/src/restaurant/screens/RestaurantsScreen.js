@@ -5,8 +5,6 @@ import AddRestaurantForm from "../modules/AddRestaurantForm";
 import ServerRoot from '../../ServerRoot';
 
 class RestaurantsScreen extends React.Component{
-    // let restaurants = await getRestaurants();
-    // console.log(restaurants)
     constructor(props){
         super(props);
         this.state = {

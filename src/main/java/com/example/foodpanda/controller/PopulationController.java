@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.NoSuchAlgorithmException;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/populationcontroller")
 public class PopulationController {
     @Autowired
     RestaurantService restaurantService;
@@ -45,7 +45,7 @@ public class PopulationController {
             userService.deleteAll();
             userService.saveuser(new User("user","user"));
             userService.saveuser(new User("creatura","cratura"));
-        } catch (NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -57,5 +57,6 @@ public class PopulationController {
         foodService.saveFood(f2);
         foodService.saveFood(new Food("apa de la chiuveta",1,FoodCategory.Light,r2));
         foodService.saveFood(new Food("lacrimi de la robinet",0.5f,FoodCategory.Light,r2));
+        foodService.saveFood(new Food("friptura de caine",1,FoodCategory.Asian,r2));
     }
 }
