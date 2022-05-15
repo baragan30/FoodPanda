@@ -49,12 +49,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/authcontroller/signin/**").permitAll()
+                .authorizeRequests().antMatchers("/authcontroller/**").permitAll()
                                     .antMatchers("/populationcontroller/**").permitAll()
                                     .antMatchers("/restaurantLogin/**").permitAll()
-//                                    .anyRequest().permitAll();
-//                                    .antMatchers("/**").hasRole("USER")
-                                    .anyRequest().authenticated();
+                                    .antMatchers("/getOrdersByUser/**").hasRole("USER")
+
+                                    .antMatchers("/getFoodsByRestaurantName/**").hasAnyRole("USER","ADMIN")
+                                    .antMatchers("/neworder/**").hasAnyRole("USER","ADMIN")
+
+                                    .antMatchers("getRestaurants/**").hasRole("ADMIN")
+                                    .antMatchers("getCategories/**").hasRole("ADMIN")
+                                    .antMatchers("/getFoodsByCategoryAndRestaurant/**").hasRole("ADMIN")
+                                    .antMatchers("/getOrdersByRestaurant/**").hasRole("ADMIN")
+                                    .antMatchers("/newfood/**").hasRole("ADMIN")
+                                    .antMatchers("/newrestaurant/**").hasRole("ADMIN");
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

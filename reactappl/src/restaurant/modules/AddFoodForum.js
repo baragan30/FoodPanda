@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import {useNavigate} from 'react-router-dom';
+import RestaurantService from "../../services/RestaurantService";
 const serverRoot = 'http://localhost:8080';
 
 
@@ -18,7 +19,7 @@ function AddFoodForm({forceUpdate,categoriesList,curentRestaurant}){
           <div className="form-group col-md-6">
           <label htmlFor="category">Category</label>
           <select id="category" className="form-control">
-            {categoriesList.map((category)=><option>{category}</option>)}
+            {React.Children.toArray(categoriesList.map((category)=><option>{category}</option>))}
           </select>
           </div>
 
@@ -45,14 +46,13 @@ async function addNewFood({event,forceUpdate,curentRestaurant}){
         restaurant:curentRestaurant,
         price:event.target.elements.price.value
     }
-    console.log(food);
     if(food.name !== "" && food.category !== ""){
-        await axios.post(`${serverRoot}/newfood`, food)
-          .then(function (response) {
+          RestaurantService.addNewFood(food)
+          .then( _ => {
             forceUpdate();
           })
-          .catch(function (error) {
-            console.log(error);
+          .catch( _ => {
+            // The exception is displayed in Restaurant Service
           });
     }
 }

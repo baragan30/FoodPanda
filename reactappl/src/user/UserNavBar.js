@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import {Link} from "react-router-dom"
+import AuthService from "../services/AuthService";
 
 function UserNavBar({curentUser}){
     return (
@@ -23,7 +24,7 @@ function UserNavBar({curentUser}){
             <Link className="nav-link" to = './cart'>Cart <span className="sr-only">(current)</span></Link>
           </li>
           <li className="nav-item active">
-            <Link className="nav-link" to = '/'>Log Out <span className="sr-only">(current)</span></Link>
+            <Link className="nav-link" onClick={AuthService.logoutUser} to = '/'>Log Out <span className="sr-only">(current)</span></Link>
           </li>
         </ul>
   

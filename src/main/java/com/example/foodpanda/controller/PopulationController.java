@@ -37,8 +37,13 @@ public class PopulationController {
 
     private void populateRestaurant(){
         restaurantService.deleteAll();
-        restaurantService.saveRestaurant(r1);
-        restaurantService.saveRestaurant(r2);
+        try {
+            restaurantService.saveRestaurant(r1);
+            restaurantService.saveRestaurant(r2);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
     private void populateUsers(){
         try {

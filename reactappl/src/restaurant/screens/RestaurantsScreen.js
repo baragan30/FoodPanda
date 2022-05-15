@@ -1,8 +1,7 @@
 import RestaurantBar from "../modules/RestaurantBar";
-import axios from 'axios';
 import React from "react";
 import AddRestaurantForm from "../modules/AddRestaurantForm";
-import ServerRoot from '../../ServerRoot';
+import RestaurantService from "../../services/RestaurantService";
 
 class RestaurantsScreen extends React.Component{
     constructor(props){
@@ -11,9 +10,8 @@ class RestaurantsScreen extends React.Component{
             restaurants:[]
         }
     }
-
     async componentDidMount(){
-        this.setState({restaurants: await this.getRestaurants()});
+        this.setState({restaurants: await RestaurantService.loadAllRestaurants()});
     }
     render(){
           return (
@@ -24,24 +22,11 @@ class RestaurantsScreen extends React.Component{
                     <li className="list-group-item active">Restaurant List</li>
                 </ul>
                 {
-                    this.state.restaurants.map((restaurant) => <RestaurantBar restaurant={restaurant}></RestaurantBar>)
+                    React.Children.toArray(this.state.restaurants.map((restaurant) => <RestaurantBar restaurant={restaurant}></RestaurantBar>))
                 }
             </div>
         )
     }
-    async getRestaurants(){
-      const response =  await axios.get(`${ServerRoot.getInstance()}/getRestaurants`)
-      .then(
-          res => {
-              let restaurants =  res.data
-              return restaurants;
-          }
-      ).catch(function (error) {
-            console.log(error);
-            return [];
-        });
-        return response;
-  }
 }
 
 

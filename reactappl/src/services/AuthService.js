@@ -7,12 +7,12 @@ class AuthService {
         username : username,
         password : password,
     }
-    return axios.post(`${API_URL}/signin`, loginRequest)
+    return axios.post(`${API_URL}/signinUser`, loginRequest)
       .then(response => {
           localStorage.setItem("user", JSON.stringify(response.data));
       })
   }
-  logout() {
+  logoutUser() {
     localStorage.removeItem("user");
   }
   register(username, email, password) {
@@ -25,5 +25,23 @@ class AuthService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));;
   }
+
+  loginRestaurant(username, password) {
+    let loginRequest = {
+        username : username,
+        password : password,
+    }
+    return axios.post(`${API_URL}/signinRestaurant`, loginRequest)
+      .then(response => {
+          localStorage.setItem("restaurant", JSON.stringify(response.data));
+      })
+  }
+  logoutRestaurant() {
+    localStorage.removeItem("restaurant");
+  }
+  getCurrentRestaurant() {
+    return JSON.parse(localStorage.getItem('restaurant'));;
+  }
+
 }
 export default new AuthService()

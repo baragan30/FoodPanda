@@ -1,18 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import UserNavBar from './UserNavBar';
 import {Routes,Route} from "react-router-dom"
 import OrdersScreen from './screens/OrdersScreen';
 import FoodsScreen from './screens/FoodsScreen';
 import CartScreen from './screens/CartScreen';
-import axios from 'axios';
-import AuthService from '../AuthService';
+import AuthService from '../services/AuthService';
+import UserService from '../services/UserService';
 
 const serverRoot = 'http://localhost:8080'
 function UserPage(){
+    let navigate = useNavigate();
     
-    let user = AuthService.getCurrentUser();
+    const [user ,setUser]= useState(AuthService.getCurrentUser());
+    // let navigate = useNavigate();
+    // useEffect(()=>{
+    //     if(user === null){
+    //         console.log('here');
+    //         navigate('./');
+    //     }
+    // },[user])
     const [cart, setCurentCart] = useState([]) 
+    useEffect( e =>{
+        setUser(AuthService.getCurrentUser())
+        if(user === null)
+            navigate('/')
+    },[])
+    if(user === null)
+        return <div/>;
+        
 
     const addToCart = (food) =>{
         let order = cart.find(order => order.restaurant.id == food.restaurant.id);
@@ -29,13 +45,13 @@ function UserPage(){
         setCurentCart(cart);
     }
     const placeOrder = (order)=>{
-        axios.post(`${serverRoot}/neworder`,order)
-        .then(function (response) {
+        UserService.placeOrder(order)
+        .then( _ => {
+            //remove the cart from state
             setCurentCart(arrayRemove(cart,order));
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        }).catch( _ =>{
+            // error is displayed in UserService
+        })
     }
     
     return (

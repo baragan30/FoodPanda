@@ -20,29 +20,11 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Autowired
-    PasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    /**
-     * try to login a user by a username and a password
-     * @return the user with coresponding username
-     * @throws Exception if it doesn't exists a user in database with specific username and password
-     */
-    public User login(String username, String password) throws Exception{
-        User user = userRepository.findUserByUsername(username).get(0);
-        if(user.getPassword().equals(encoder.encode(password))) {
-            logger.info("User " + user.getUsername() + " has login");
-            return user;
-        }
-        else{
-            String errorString = "Password or username are incorrect";
-            logger.error(errorString);
-            throw new Exception(errorString);
-        }
     }
 
     @Transactional

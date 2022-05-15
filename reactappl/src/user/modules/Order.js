@@ -25,7 +25,7 @@ export default function Order({order}){
                         </thead>
                         <tbody>
                             {
-                                order.foods.map((food)=><Food food = {food}/>)
+                                React.Children.toArray(order.foods.map((food)=><Food food = {food}/>))
                              }
                         </tbody>
                         
@@ -40,7 +40,6 @@ export default function Order({order}){
 
 function orderToString(order){
     let totalPrice = 0;
-    console.log(order.foods);
     for(const food of order.foods){
          totalPrice+=food.price;
     }

@@ -28,8 +28,14 @@ public class RestaurantController {
 
     @PostMapping("/newrestaurant")
     public ResponseEntity addNewRestaurant(@RequestBody Restaurant restaurant){
-        System.out.println(restaurant.getName());
-        restaurantService.saveRestaurant(restaurant);
+
+        try {
+            System.out.println(restaurant.getName());
+            restaurantService.saveRestaurant(restaurant);
+
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(e.toString());
+        }
         return ResponseEntity.ok().body("Done");
     }
     @GetMapping("/getCategories")
@@ -41,7 +47,7 @@ public class RestaurantController {
     public ResponseEntity logIn(@PathVariable String name, @PathVariable String password){
         try{
             restaurant = restaurantService.getRestaurantByName(name);
-            if(Restaurant.password.equals(password))
+            if(Restaurant.passwordD.equals(password))
                 return ResponseEntity.ok().body(restaurant);
         }catch (Exception e){
             e.printStackTrace();

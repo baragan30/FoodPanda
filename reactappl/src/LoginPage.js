@@ -2,9 +2,7 @@ import './css/LoginPage.css'
 import React from "react";
 import {useNavigate,BrowserRouter as Router,Link,Routes,Route} from "react-router-dom"
 import axios from 'axios';
-import AuthService from './AuthService';
-
-// import data from './App'
+import AuthService from './services/AuthService';
 
 const serverRoot = 'http://localhost:8080'
 let navigate;
@@ -73,17 +71,12 @@ function handleLogin(event){
 }
 
 function loginRestaurant(name, password){
-    axios.get(`${serverRoot}/restaurantLogin/${name}/${password}`)
-      .then(res => {
-            navigate('/restaurant',{
-                state: res.data
-              });
-      }).catch(function (error) {
-            if (error.response.status === 404) {
-                displayError(error.response.data);
-            }
-        })
-
+    AuthService.loginRestaurant(name,password)
+    .then(res => {
+        navigate('/restaurant');
+    }).catch(function(error){
+        displayError(error);
+    });
 }
 function loginUser(username, password){
     AuthService.loginUser(username,password)
@@ -93,6 +86,7 @@ function loginUser(username, password){
         displayError(error);
     });
 }
+
 function register(event){
     displayError("");
     event.preventDefault();

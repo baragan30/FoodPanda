@@ -2,15 +2,15 @@ import axios from "axios"
 import React from "react";
 import { useEffect, useState } from "react"
 import Food from "../modules/AddFoodBar";
-import AuthService from "../../AuthService";
-const serverRoot = 'http://localhost:8080';
+import UserService from "../../services/UserService";
 
 export default function FoodsScreen({addToCart}){
     const [searchName,setSearchName] = useState("");
     const [foods,setFoods] = useState([]);
     // const res
     useEffect(async()=>{
-        setFoods(await loadFoods(searchName));
+        setFoods(await UserService.loadFoods(searchName));
+        // console.log(await UserService.loadFoods(searchName))
     },[searchName])
     const search = (e) =>{
       e.preventDefault();
@@ -21,7 +21,7 @@ export default function FoodsScreen({addToCart}){
         <div>
           <form onSubmit={search} className="form-inline my-2 my-lg-0">
             <input name="restaurantName" className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-            <button type="sumit" className="btn btn-dark">Add</button>
+            <button type="sumit" className="btn btn-dark">Filter</button>
           </form>
             <table className="table table-striped table-dark">
               <thead>
@@ -35,7 +35,7 @@ export default function FoodsScreen({addToCart}){
               </thead>
               <tbody>
                 {
-                foods.map((food)=>{return <Food addToCart={addToCart} food= {food}/>})
+                React.Children.toArray(foods.map((food)=>{return <Food addToCart={addToCart} food= {food}/>}))
               }
               </tbody>
               
@@ -43,23 +43,4 @@ export default function FoodsScreen({addToCart}){
 
         </div>
     );
-}
-
-async function loadFoods(restaurantName){
-  
-  let user = AuthService.getCurrentUser();
-  console.log(user);
-    return await axios.get(`${serverRoot}/getFoodsByRestaurantName/${restaurantName}`,
-      {
-        headers :{ Authorization: "Bearer " + user.jwt}
-      }
-    )
-    .then(
-        res => {
-            return res.data;
-        }
-    ).catch(function (error) {
-          console.log(error);
-          return []
-      });
 }

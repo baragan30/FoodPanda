@@ -26,15 +26,6 @@ public class UserController {
         }
         return ResponseEntity.ok().body("Done");
     }
-    @GetMapping("/userLogin/{username}/{password}")
-    public ResponseEntity logIn(@PathVariable String username, @PathVariable String password){
-        try{
-            return ResponseEntity.ok().body(userService.login(username,password));
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.toString());
-        }
-    }
     @GetMapping("curentUser")
     public ResponseEntity getCurentUser(){
         return ResponseEntity.ok().body(user);

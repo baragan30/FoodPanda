@@ -1,6 +1,7 @@
 package com.example.foodpanda.security.pwt;
 
 
+import com.example.foodpanda.security.services.RestaurantDetailsImpl;
 import com.example.foodpanda.security.services.UserDetailsImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,13 +22,24 @@ public class JwtUtils implements Serializable {
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-        return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
+        try{
+            UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+            return Jwts.builder()
+                    .setSubject((userPrincipal.getUsername()))
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                    .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                    .compact();
+        }catch (Exception e){
+            RestaurantDetailsImpl restaurantDetails = (RestaurantDetailsImpl) authentication.getPrincipal();
+            return Jwts.builder()
+                    .setSubject((restaurantDetails.getUsername()))
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                    .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                    .compact();
+        }
+
     }
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();

@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom"
 import React from "react";
+import AuthService from "../services/AuthService";
 
 function RestaurantNavBar({curentRestaurant}){
     return (
@@ -22,7 +23,7 @@ function RestaurantNavBar({curentRestaurant}){
             <Link className="nav-link" to = './restaurants'>Restaurants <span className="sr-only">(current)</span></Link>
           </li>
           <li className="nav-item active">
-            <Link className="nav-link" to = '/'>Log Out <span className="sr-only">(current)</span></Link>
+            <Link className="nav-link" onClick={AuthService.logoutRestaurant} to = '/'>Log Out <span className="sr-only">(current)</span></Link>
           </li>
         </ul>
       </div>

@@ -40,7 +40,7 @@ public class FoodController {
         return ResponseEntity.ok().body("error");
     }
     @GetMapping("/getFoodsByRestaurantName/{restaurantName}")
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     public ResponseEntity getFoodsByRestaurantName(@PathVariable String restaurantName) {
         List<Food> foods = null;
         try {

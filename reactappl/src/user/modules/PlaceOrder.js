@@ -13,7 +13,7 @@ export default function PlaceOrder({order,placeOrder}){
                 </a>
             </p>
             <div className="collapse" id={`toplaceorder${order.restaurant.name}`}>
-                <div class="card card-body">
+                <div className="card card-body">
                     <table className="table table-striped table-dark">
                         <thead>
                             <tr>
@@ -26,7 +26,9 @@ export default function PlaceOrder({order,placeOrder}){
                         </thead>
                         <tbody>
                             {
-                                order.foods.map((food)=><Food food = {food}/>)
+                                React.Children.toArray(
+                                    order.foods.map((food)=><Food food = {food}/>)
+                                )
                              }
                         </tbody>
                         
@@ -41,7 +43,6 @@ export default function PlaceOrder({order,placeOrder}){
 
 function orderToString(order){
     let totalPrice = 0;
-    console.log(order.foods);
     for(const food of order.foods){
          totalPrice+=food.price;
     }

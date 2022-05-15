@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Food from "./Food";
+import RestaurantService from "../../services/RestaurantService";
 
 const serverRoot = 'http://localhost:8080'
 
@@ -11,15 +12,9 @@ export default function Order({order}){
 
     useEffect( async ()=>{
     },[])
-    const setOrderType= (type) =>{
+    const setOrderType= async (type) =>{
         order.orderType = type;
-        axios.post(`${serverRoot}/neworder`, order)
-          .then(function (response) {
-            // console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        await RestaurantService.updateOrder(order);
         forceUpdate();
     }
     return (
@@ -45,7 +40,7 @@ export default function Order({order}){
                         </thead>
                         <tbody>
                             {
-                                order.foods.map((food)=><Food food = {food}/>)
+                                React.Children.toArray(order.foods.map((food)=><Food food = {food}/>))
                              }
                         </tbody>
                         

@@ -1,14 +1,18 @@
 package com.example.foodpanda.controller;
 
 
+import com.example.foodpanda.model.Restaurant;
 import com.example.foodpanda.model.auth.JwtClientResponse;
+import com.example.foodpanda.model.auth.JwtRestaurantResponse;
 import com.example.foodpanda.model.auth.LoginRequest;
 import com.example.foodpanda.model.User;
 import com.example.foodpanda.repository.UserRepository;
 import com.example.foodpanda.security.pwt.JwtUtils;
+import com.example.foodpanda.security.services.RestaurantDetailsImpl;
 import com.example.foodpanda.security.services.UserDetailsImpl;
 import com.example.foodpanda.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,25 +37,57 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @PostMapping("/signin")
+    @PostMapping("/signinUser")
     @ResponseBody
-    public JwtClientResponse authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?>  authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//        List<String> roles = userDetails.getAuthorities().stream()
-//                .map(item -> item.getAuthority())
-//                .collect(Collectors.toList());
-//
-        JwtClientResponse jwtClientResponse = new JwtClientResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername()
-        );
-        return jwtClientResponse;
+        try{
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            JwtClientResponse jwtClientResponse = new JwtClientResponse(jwt,
+                    userDetails.getId(),
+                    userDetails.getUsername()
+            );
+            return ResponseEntity.ok().body(jwtClientResponse);
 
+        }catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Wrong username or password");
+        }
+    }
+    @PostMapping("/signinRestaurant")
+    @ResponseBody
+    public ResponseEntity<?>  authenticateRestaurant(@RequestBody LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        try{
+            RestaurantDetailsImpl restaurantDetails = (RestaurantDetailsImpl) authentication.getPrincipal();
+            Restaurant restaurant = restaurantDetails.getRestaurant();
+            JwtRestaurantResponse jwtRestaurantResponse = new JwtRestaurantResponse(jwt,
+                    restaurant.getId(),
+                    restaurant.getName(),
+                    restaurant.getLocation(),
+                    restaurant.getAvailableZones(),
+                    restaurant.getFoods(),
+                    restaurant.getOrders()
+            );
+            return ResponseEntity.ok().body(jwtRestaurantResponse);
+
+        }catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Wrong username or password");
+        }
     }
 
 

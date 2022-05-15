@@ -2,6 +2,8 @@ package com.example.foodpanda.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "Restaurants")
 public class Restaurant{
-    public static final String password = "admin";
+    public static final String passwordD = "admin";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +20,8 @@ public class Restaurant{
     public String name;
     public String location;
     public String availableZones;
+
+    public String password;
 
     @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -31,9 +35,11 @@ public class Restaurant{
         this.name = name;
         this.location = location;
         this.availableZones = availableZones;
+        this.password = passwordD;
     }
 
     public Restaurant() {
+        this.password = passwordD;
 
     }
 
@@ -96,4 +102,11 @@ public class Restaurant{
     }
 
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
