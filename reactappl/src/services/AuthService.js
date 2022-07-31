@@ -1,7 +1,6 @@
 import axios from "axios";
 const API_URL = "http://localhost:8080/authcontroller";
 class AuthService {
-
   loginUser(username, password) {
     let loginRequest = {
         username : username,
@@ -31,6 +30,7 @@ class AuthService {
         username : username,
         password : password,
     }
+    console.log(loginRequest);
     return axios.post(`${API_URL}/signinRestaurant`, loginRequest)
       .then(response => {
           localStorage.setItem("restaurant", JSON.stringify(response.data));

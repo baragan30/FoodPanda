@@ -40,6 +40,10 @@ public class UserService {
 
     }
 
+    public User getUserByUsername(String username){
+        return userRepository.findUserByUsername(username).get(0);
+    }
+
     @Transactional
     public void deleteuser(User user){
         userRepository.delete(user);
@@ -49,4 +53,6 @@ public class UserService {
     public void deleteAll(){
         userRepository.deleteAll();
     }
+
+
 }

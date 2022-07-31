@@ -15,13 +15,13 @@ class MailService{
                         price: `${price}$`,
                         foods : foodString,
                     };
-            // send('service_83bui7i', `template_15h3lep`, emailInfo,  `L1R_dB-uklqNAeYtC`)
-            //     .then((result) => {
-            //         alert(result.text);
-            //     },
-            //     (error) => {
-            //         alert(error.text);
-            //     });
+            send('service_83bui7i', `template_15h3lep`, emailInfo,  `L1R_dB-uklqNAeYtC`)
+                .then((result) => {
+                    alert(result.text);
+                },
+                (error) => {
+                    alert(error.text);
+                });
         }
 }
 export default new MailService()

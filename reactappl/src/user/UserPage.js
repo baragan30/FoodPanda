@@ -13,13 +13,6 @@ function UserPage(){
     let navigate = useNavigate();
     
     const [user ,setUser]= useState(AuthService.getCurrentUser());
-    // let navigate = useNavigate();
-    // useEffect(()=>{
-    //     if(user === null){
-    //         console.log('here');
-    //         navigate('./');
-    //     }
-    // },[user])
     const [cart, setCurentCart] = useState([]) 
     useEffect( e =>{
         setUser(AuthService.getCurrentUser())

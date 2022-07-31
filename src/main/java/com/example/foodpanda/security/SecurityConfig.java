@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/authcontroller/**").permitAll()
                                     .antMatchers("/populationcontroller/**").permitAll()
-                                    .antMatchers("/restaurantLogin/**").permitAll()
+
                                     .antMatchers("/getOrdersByUser/**").hasRole("USER")
 
                                     .antMatchers("/getFoodsByRestaurantName/**").hasAnyRole("USER","ADMIN")
